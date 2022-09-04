@@ -19,9 +19,9 @@ public class FacultyController {
         this.facultyService = facultyService;
     }
 
-    @GetMapping("{count}")
-    public ResponseEntity<Faculty> getFaculty(@PathVariable Long count) {
-        Faculty faculty = facultyService.getFaculty(count);
+    @GetMapping("/{id}")
+    public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
+        Faculty faculty = facultyService.getFaculty(id);
         if (faculty == null) {
             return ResponseEntity.notFound().build();
         }
@@ -43,9 +43,14 @@ public class FacultyController {
         return ResponseEntity.ok(foundFaculty);
     }
 
-    @DeleteMapping("{count}")
-    public Faculty deleteFaculty(@PathVariable Long count) {
-        return facultyService.deleteFaculty(count);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Faculty> deleteFaculty(@PathVariable Long id) {
+        try {
+            facultyService.deleteFaculty(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
@@ -53,8 +58,8 @@ public class FacultyController {
         return ResponseEntity.ok(facultyService.getAllFaculties());
     }
 
-    @GetMapping("/color/{color}")
-    public List<Faculty> getFacultiesByColor(@PathVariable String color) {
+    @GetMapping("/color")
+    public List<Faculty> getFacultiesByColor(@RequestParam("color") String color) {
         return facultyService.getFacultiesByColor(color);
 
     }

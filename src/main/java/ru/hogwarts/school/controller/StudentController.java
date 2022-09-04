@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -20,9 +19,9 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("{count}")
-    public ResponseEntity<Student> getStudent(@PathVariable Long count) {
-        Student student = studentService.getStudent(count);
+    @GetMapping("/{id}")
+    public ResponseEntity<Student> getStudent(@PathVariable Long id) {
+        Student student = studentService.getStudent(id);
         if (student == null) {
             return ResponseEntity.notFound().build();
         }
@@ -43,9 +42,15 @@ public class StudentController {
         return ResponseEntity.ok(foundStudent);
     }
 
-    @DeleteMapping("{count}")
-    public Student deleteStudent(@PathVariable Long count) {
-        return studentService.delStudent(count);
+    @DeleteMapping("/{id}")
+
+    public ResponseEntity<Student> deleteStudent(@PathVariable Long id) {
+        try {
+            studentService.delStudent(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
@@ -53,8 +58,8 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
 
-    @GetMapping("/age/{age}")
-    public List<Student> getStudentByAge(@PathVariable int age) {
+    @GetMapping("/age")
+    public List<Student> getStudentByAge(@RequestParam("age") int age) {
         return studentService.getStudentsByAge(age);
 
     }

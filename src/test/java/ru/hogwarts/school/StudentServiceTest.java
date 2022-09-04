@@ -1,101 +1,85 @@
 package ru.hogwarts.school;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repositories.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
+@ExtendWith(MockitoExtension.class)
 public class StudentServiceTest {
-
-    private final StudentService studentService = new StudentService();
+    @Mock
+    private StudentRepository studentRepository;
+    @InjectMocks
+    private StudentService studentService;
 
     @Test
-    public void putStudentsTest() {
-        HashMap<Long, Student> allStudents = new HashMap<>();
-        Student student1 = new Student(1L, "Anton", 12);
-        Assertions.assertThat(studentService.createStudent(student1)).isEqualTo(allStudents.put(1L, student1));
-
+    public void addStudent() {
+        Student student = new Student(1L, "Anton", 12);
+        Mockito.when(studentRepository.save(student)).thenReturn(student);
+        org.junit.jupiter.api.Assertions.assertEquals(student, studentService.createStudent(student));
     }
 
     @Test
-    public void getStudentsTest() {
-        Student student1 = new Student(1L, "Anton", 12);
-        Student student2 = new Student(2L, "Oleg", 14);
-        studentService.createStudent(student1);
-        studentService.createStudent(student2);
-
-        Student result1 = studentService.getStudent(3L);
-        Assertions.assertThat(result1).isEqualTo(null);
-        Student result2 = studentService.getStudent(1L);
-        Assertions.assertThat(result2).isEqualTo(student1);
-
+    public void updateStudent() {
+        Student student = new Student(1L, "Anton", 12);
+        studentService.updateStudent(student);
+        Student studentChange = studentService.updateStudent(new Student(1L, "Victor", 12));
+        Mockito.when(studentRepository.save(studentChange)).thenReturn(studentChange);
+        org.junit.jupiter.api.Assertions.assertEquals(studentChange, studentService.updateStudent(studentChange));
     }
 
     @Test
-    public void updateStudentPositiveTest() {
-        Student student1 = new Student(1L, "Anton", 12);
-        Student student2 = new Student(2L, "Oleg", 14);
-        studentService.createStudent(student1);
-        studentService.createStudent(student2);
-
-        Student result1 = studentService.updateStudent(student1);
-        Assertions.assertThat(result1).isEqualTo(student1);
-
+    public void deleteStudent() {
+        Student student = new Student(1L, "Anton", 12);
+        studentService.delStudent(1L);
+        Mockito.when(studentRepository.findById(1L)).thenReturn(Optional.empty());
+        org.junit.jupiter.api.Assertions.assertEquals(null, studentService.getStudent(1L));
     }
 
     @Test
-    public void updateStudentNegativeTest() {
-        Student student1 = new Student(1L, "Anton", 12);
-        Student student2 = new Student(2L, "Oleg", 14);
-        Student student3 = new Student(3L, "Egor", 10);
-        studentService.createStudent(student1);
-        studentService.createStudent(student2);
-
-        Student result2 = studentService.updateStudent(student3);
-        Assertions.assertThat(result2).isEqualTo(null);
-
+    public void getStudentPositive() {
+        Student student = new Student(1L, "Anton", 12);
+        Student student1 = new Student(2L, "Ivan", 13);
+        Mockito.when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
+        org.junit.jupiter.api.Assertions.assertEquals(Optional.of(student), studentRepository.findById(1L));
     }
 
     @Test
-    public void deleteStudentsTest() {
-        Student student1 = new Student(1L, "Anton", 12);
-        Student student2 = new Student(2L, "Oleg", 14);
-        studentService.createStudent(student1);
-        studentService.createStudent(student2);
-        Assertions.assertThat(studentService.delStudent(1L)).isEqualTo(student1);
-        Assertions.assertThat(studentService.delStudent(3L)).isEqualTo(null);
-
+    public void getStudentNegative() {
+        Mockito.when(studentRepository.findById(2L)).thenReturn(Optional.empty());
+        org.junit.jupiter.api.Assertions.assertEquals(null, studentService.getStudent(2L));
     }
 
     @Test
-    public void getAllStudentsTest() {
-        Student student1 = new Student(1L, "Anton", 12);
-        Student student2 = new Student(2L, "Oleg", 14);
-        studentService.createStudent(student1);
-        studentService.createStudent(student2);
-        Collection<Student> expectedStudentsList = studentService.getAllStudents();
-
-        Collection<Student> realStudentsList = studentService.getAllStudents();
-        assertEquals(expectedStudentsList, realStudentsList);
-
+    public void getAllStudents() {
+        List<Student> allStudents = new ArrayList<>();
+        Student student = new Student(1L, "Anton", 12);
+        Student student1 = new Student(2L, "Ivan", 13);
+        allStudents.add(student);
+        allStudents.add(student1);
+        studentService.delStudent(1L);
+        Mockito.when(studentRepository.findAll()).thenReturn(allStudents);
+        org.junit.jupiter.api.Assertions.assertEquals(allStudents, studentService.getAllStudents());
     }
 
     @Test
     public void getStudentsByAge() {
-        Student student1 = new Student(1L, "Anton", 12);
-        Student student2 = new Student(2L, "Oleg", 14);
-        studentService.createStudent(student1);
-        studentService.createStudent(student2);
-        List<Student> expectedStudentsList = studentService.getStudentsByAge(12);
-        List<Student> actualStudentsList = new ArrayList<>();
-        actualStudentsList.add(student1);
-        assertEquals(expectedStudentsList, actualStudentsList);
+        List<Student> allStudents = List.of(
+                new Student(1L, "Anton", 12),
+                new Student(2L, "Ivan", 13),
+                new Student(3L, "Oleg", 13));
+        List<Student> allStudentsAfterSort = studentService.getStudentsByAge(12);
+        Mockito.when(studentRepository.findAll()).thenReturn(allStudentsAfterSort);
+        org.junit.jupiter.api.Assertions.assertEquals(allStudentsAfterSort, studentService.getStudentsByAge(12));
 
     }
 

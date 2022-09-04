@@ -1,111 +1,90 @@
 package ru.hogwarts.school;
 
-import org.assertj.core.api.Assertions;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.repositories.FacultyRepository;
 import ru.hogwarts.school.service.FacultyService;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.*;
 
+
+@ExtendWith(MockitoExtension.class)
 public class FacultyServiceTest {
-
-    private final FacultyService facultyService = new FacultyService();
+    @Mock
+    private FacultyRepository facultyRepository;
+    @InjectMocks
+    private FacultyService facultyService;
 
     @Test
-    public void createFacultyTest() {
-        HashMap<Long, Faculty> allFaculties = new HashMap<>();
-        Faculty faculty1 = new Faculty(1L, "psychology", "red");
-        Assertions.assertThat(facultyService.createFaculty(faculty1)).isEqualTo(allFaculties.put(1L, faculty1));
-
+    public void addFaculty() {
+        Faculty faculty = new Faculty(1L, "Hogwarts", "red");
+        Mockito.when(facultyRepository.save(faculty)).thenReturn(faculty);
+        org.junit.jupiter.api.Assertions.assertEquals(faculty, facultyService.createFaculty(faculty));
     }
 
     @Test
-    public void getFacultyTest() {
-        Faculty faculty1 = new Faculty(1L, "psychology", "red");
-        Faculty faculty2 = new Faculty(2L, "medical", "blue");
-        Faculty faculty3 = new Faculty(3L, "law", "black");
-
-        facultyService.createFaculty(faculty1);
-        facultyService.createFaculty(faculty2);
-        facultyService.createFaculty(faculty3);
-
-        Faculty result1 = facultyService.getFaculty(4L);
-        Assertions.assertThat(result1).isEqualTo(null);
-        Faculty result2 = facultyService.getFaculty(1L);
-        Assertions.assertThat(result2).isEqualTo(faculty1);
-
+    public void updateFaculty() {
+        Faculty faculty = new Faculty(1L, "Hogwarts", "red");
+        facultyService.updateFaculty(faculty);
+        Faculty facultyChange = facultyService.updateFaculty(new Faculty(1L, "Slytherin", "black"));
+        Mockito.when(facultyRepository.save(facultyChange)).thenReturn(facultyChange);
+        org.junit.jupiter.api.Assertions.assertEquals(facultyChange, facultyService.updateFaculty(facultyChange));
     }
 
     @Test
-    public void updateFacultyPositiveTest() {
-        Faculty faculty1 = new Faculty(1L, "psychology", "red");
-        Faculty faculty2 = new Faculty(2L, "medical", "blue");
-        facultyService.createFaculty(faculty1);
-        facultyService.createFaculty(faculty2);
-
-        Faculty result1 = facultyService.updateFaculty(faculty1);
-        Assertions.assertThat(result1).isEqualTo(faculty1);
-
+    public void getFacultyPositive() {
+        Faculty faculty = new Faculty(1L, "Hogwarts", "red");
+        Faculty faculty1 = new Faculty(2L, "Slytherin", "black");
+        Mockito.when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
+        org.junit.jupiter.api.Assertions.assertEquals(Optional.of(faculty), facultyRepository.findById(1L));
     }
 
     @Test
-    public void updateFacultyNegativeTest() {
-        Faculty faculty1 = new Faculty(1L, "psychology", "red");
-        Faculty faculty2 = new Faculty(2L, "medical", "blue");
-        facultyService.createFaculty(faculty1);
-
-
-        Faculty result1 = facultyService.updateFaculty(faculty2);
-        Assertions.assertThat(result1).isEqualTo(null);
-
+    public void getFacultyNegative() {
+        Mockito.when(facultyRepository.findById(2L)).thenReturn(Optional.empty());
+        org.junit.jupiter.api.Assertions.assertEquals(null, facultyService.getFaculty(2L));
     }
 
     @Test
-    public void deleteFacultyTest() {
-        Faculty faculty1 = new Faculty(1L, "psychology", "red");
-        Faculty faculty2 = new Faculty(2L, "medical", "blue");
-        facultyService.createFaculty(faculty1);
-        facultyService.createFaculty(faculty2);
-        Assertions.assertThat(facultyService.deleteFaculty(1L)).isEqualTo(faculty1);
-        Assertions.assertThat(facultyService.deleteFaculty(3L)).isEqualTo(null);
-
+    public void deleteFaculty() {
+        Faculty faculty = new Faculty(1L, "Hogwarts", "red");
+        facultyService.deleteFaculty(1L);
+        Mockito.when(facultyRepository.findById(1L)).thenReturn(Optional.empty());
+        org.junit.jupiter.api.Assertions.assertEquals(null, facultyService.getFaculty(1L));
     }
 
     @Test
-    public void getAllFacultiesTest() {
-        Faculty faculty1 = new Faculty(1L, "psychology", "red");
-        Faculty faculty2 = new Faculty(2L, "medical", "blue");
-        facultyService.createFaculty(faculty1);
-        facultyService.createFaculty(faculty2);
-        Collection<Faculty> expectedFacultiesList = facultyService.getAllFaculties();
-
-        Collection<Faculty> realFacultiesList = facultyService.getAllFaculties();
-        assertEquals(expectedFacultiesList, realFacultiesList);
-
+    public void getAllStudents() {
+        List<Faculty> allFaculties = new ArrayList<>();
+        Faculty faculty = new Faculty(1L, "Hogwarts", "red");
+        Faculty faculty1 = new Faculty(2L, "Slytherin", "black");
+        allFaculties.add(faculty);
+        allFaculties.add(faculty1);
+        facultyService.deleteFaculty(1L);
+        Mockito.when(facultyRepository.findAll()).thenReturn(allFaculties);
+        org.junit.jupiter.api.Assertions.assertEquals(allFaculties, facultyService.getAllFaculties());
     }
 
     @Test
-    public void getStudentsByAge() {
-        Faculty faculty1 = new Faculty(1L, "psychology", "red");
-        Faculty faculty2 = new Faculty(2L, "medical", "blue");
-        facultyService.createFaculty(faculty1);
-        facultyService.createFaculty(faculty2);
-        List<Faculty> expectedFacultiesList = facultyService.getFacultiesByColor("red");
-        List<Faculty> actualFacultiesList = new ArrayList<>();
-        actualFacultiesList.add(faculty1);
-        assertEquals(expectedFacultiesList, actualFacultiesList);
-
+    public void getFacultiesByColor() {
+        List<Faculty> allStudents = List.of(
+                new Faculty(1L, "Hogwarts", "red"),
+                new Faculty(2L, "Slytherin", "black"));
+        List<Faculty> allFacultiesAfterSort = facultyService.getFacultiesByColor("black");
+        Mockito.when(facultyRepository.findAll()).thenReturn(allFacultiesAfterSort);
+        org.junit.jupiter.api.Assertions.assertEquals(allFacultiesAfterSort, facultyService.getFacultiesByColor("black"));
 
     }
+
 
 }
-
-
 
 
 
