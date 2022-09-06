@@ -45,11 +45,11 @@ public class FacultyController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Faculty> deleteFaculty(@PathVariable Long id) {
-        try {
-            facultyService.deleteFaculty(id);
-        } catch (Exception e) {
+        Faculty faculty = facultyService.getFaculty(id);
+        if (faculty == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+        facultyService.deleteFaculty(id);
         return ResponseEntity.ok().build();
     }
 
@@ -60,7 +60,7 @@ public class FacultyController {
 
     @GetMapping("/color")
     public List<Faculty> getFacultiesByColor(@RequestParam("color") String color) {
-        return facultyService.getFacultiesByColor(color);
+        return facultyService.findByColor(color);
 
     }
 

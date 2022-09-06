@@ -1,6 +1,6 @@
 package ru.hogwarts.school;
 
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,24 +24,22 @@ public class FacultyServiceTest {
 
     @Test
     public void addFaculty() {
-        Faculty faculty = new Faculty(1L, "Hogwarts", "red");
-        Mockito.when(facultyRepository.save(faculty)).thenReturn(faculty);
-        org.junit.jupiter.api.Assertions.assertEquals(faculty, facultyService.createFaculty(faculty));
+        Mockito.when(facultyRepository.save(new Faculty(1L, "Hogwarts", "red"))).thenReturn(new Faculty(1L, "Hogwarts", "red"));
+        org.junit.jupiter.api.Assertions.assertEquals(new Faculty(1L, "Hogwarts", "red"), facultyService.createFaculty(new Faculty(1L, "Hogwarts", "red")));
     }
 
     @Test
     public void updateFaculty() {
-        Faculty faculty = new Faculty(1L, "Hogwarts", "red");
-        facultyService.updateFaculty(faculty);
-        Faculty facultyChange = facultyService.updateFaculty(new Faculty(1L, "Slytherin", "black"));
-        Mockito.when(facultyRepository.save(facultyChange)).thenReturn(facultyChange);
-        org.junit.jupiter.api.Assertions.assertEquals(facultyChange, facultyService.updateFaculty(facultyChange));
+        Mockito.when(facultyRepository.save(new Faculty(1L, "Hogwarts", "red"))).thenReturn(new Faculty(1L, "Hogwarts", "red"));
+        org.junit.jupiter.api.Assertions.assertEquals(new Faculty(1L, "Hogwarts", "red"), facultyService.createFaculty(new Faculty(1L, "Hogwarts", "red")));
+        facultyService.updateFaculty(new Faculty(1L, "Hogwarts", "red"));
+        Mockito.when(facultyRepository.save(new Faculty(1L, "Slytherin", "black"))).thenReturn(new Faculty(1L, "Slytherin", "black"));
+        org.junit.jupiter.api.Assertions.assertEquals(new Faculty(1L, "Slytherin", "black"), facultyService.updateFaculty(new Faculty(1L, "Slytherin", "black")));
     }
 
     @Test
     public void getFacultyPositive() {
         Faculty faculty = new Faculty(1L, "Hogwarts", "red");
-        Faculty faculty1 = new Faculty(2L, "Slytherin", "black");
         Mockito.when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
         org.junit.jupiter.api.Assertions.assertEquals(Optional.of(faculty), facultyRepository.findById(1L));
     }
@@ -49,40 +47,42 @@ public class FacultyServiceTest {
     @Test
     public void getFacultyNegative() {
         Mockito.when(facultyRepository.findById(2L)).thenReturn(Optional.empty());
-        org.junit.jupiter.api.Assertions.assertEquals(null, facultyService.getFaculty(2L));
+        Assertions.assertNull(facultyService.getFaculty(2L));
     }
 
     @Test
     public void deleteFaculty() {
-        Faculty faculty = new Faculty(1L, "Hogwarts", "red");
-        facultyService.deleteFaculty(1L);
+        Mockito.when(facultyRepository.save( new Faculty(1L, "Hogwarts", "red"))).thenReturn( new Faculty(1L, "Hogwarts", "red"));
+        org.junit.jupiter.api.Assertions.assertEquals( new Faculty(1L, "Hogwarts", "red"), facultyService.createFaculty( new Faculty(1L, "Hogwarts", "red")));
+       facultyService.deleteFaculty(1L);
         Mockito.when(facultyRepository.findById(1L)).thenReturn(Optional.empty());
-        org.junit.jupiter.api.Assertions.assertEquals(null, facultyService.getFaculty(1L));
+        Assertions.assertNull(facultyService.getFaculty(1L));
     }
 
     @Test
-    public void getAllStudents() {
-        List<Faculty> allFaculties = new ArrayList<>();
-        Faculty faculty = new Faculty(1L, "Hogwarts", "red");
-        Faculty faculty1 = new Faculty(2L, "Slytherin", "black");
-        allFaculties.add(faculty);
-        allFaculties.add(faculty1);
-        facultyService.deleteFaculty(1L);
+    public void getAllFaculties() {
+        Mockito.when(facultyRepository.save( new Faculty(1L, "Hogwarts", "red"))).thenReturn( new Faculty(1L, "Hogwarts", "red"));
+        org.junit.jupiter.api.Assertions.assertEquals( new Faculty(1L, "Hogwarts", "red"), facultyService.createFaculty( new Faculty(1L, "Hogwarts", "red")));
+        Mockito.when(facultyRepository.save(new Faculty(2L, "Slytherin", "black"))).thenReturn(new Faculty(2L, "Slytherin", "black"));
+        org.junit.jupiter.api.Assertions.assertEquals(new Faculty(2L, "Slytherin", "black"), facultyService.createFaculty(new Faculty(2L, "Slytherin", "black")));
+        List<Faculty> allFaculties = List.of(
+                new Faculty(1L, "Hogwarts", "red"),
+                new Faculty(2L, "Slytherin", "black")
+        );
         Mockito.when(facultyRepository.findAll()).thenReturn(allFaculties);
         org.junit.jupiter.api.Assertions.assertEquals(allFaculties, facultyService.getAllFaculties());
     }
 
     @Test
     public void getFacultiesByColor() {
-        List<Faculty> allStudents = List.of(
-                new Faculty(1L, "Hogwarts", "red"),
-                new Faculty(2L, "Slytherin", "black"));
-        List<Faculty> allFacultiesAfterSort = facultyService.getFacultiesByColor("black");
-        Mockito.when(facultyRepository.findAll()).thenReturn(allFacultiesAfterSort);
-        org.junit.jupiter.api.Assertions.assertEquals(allFacultiesAfterSort, facultyService.getFacultiesByColor("black"));
-
+        Mockito.when(facultyRepository.save( new Faculty(1L, "Hogwarts", "red"))).thenReturn( new Faculty(1L, "Hogwarts", "red"));
+        org.junit.jupiter.api.Assertions.assertEquals( new Faculty(1L, "Hogwarts", "red"), facultyService.createFaculty( new Faculty(1L, "Hogwarts", "red")));
+        Mockito.when(facultyRepository.save(new Faculty(2L, "Slytherin", "black"))).thenReturn(new Faculty(2L, "Slytherin", "black"));
+        org.junit.jupiter.api.Assertions.assertEquals(new Faculty(2L, "Slytherin", "black"), facultyService.createFaculty(new Faculty(2L, "Slytherin", "black")));
+        List<Faculty> facultyByColor = facultyService.findByColor("black");
+        Mockito.when(facultyRepository.findAll()).thenReturn(facultyByColor);
+        org.junit.jupiter.api.Assertions.assertEquals(facultyByColor, facultyService.findByColor("black"));
     }
-
 
 }
 

@@ -36,7 +36,7 @@ public class FacultyService {
         return facultyRepository.findAll();
     }
 
-    public List<Faculty> getFacultiesByColor(String color) {
+    public List<Faculty> findByColor(String color) {
         List<Faculty> facultiesByColor = new ArrayList<>();
         for (Faculty faculty : facultyRepository.findAll()) {
             if (faculty.getColor().equals(color)) {
