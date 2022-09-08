@@ -4,10 +4,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
+
 
 @RestController
 @RequestMapping("/faculty")
@@ -54,15 +56,28 @@ public class FacultyController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<Faculty>> getAllFaculties() {
+    public ResponseEntity<Collection<Faculty>> findFaculties(@RequestParam(required = false) String name,
+                                                             @RequestParam(required = false) String color) {
+        if (color != null && !color.isBlank()) {
+            return ResponseEntity.ok(facultyService.findByColorIgnoreCase(color));
+        }
         return ResponseEntity.ok(facultyService.getAllFaculties());
     }
 
-    @GetMapping("/color")
-    public List<Faculty> getFacultiesByColor(@RequestParam("color") String color) {
-        return facultyService.findByColor(color);
-
+    @GetMapping("/nameFacultyIgnoreCase")
+    public ResponseEntity<Faculty> findFacultyIgnoreCase(@RequestParam String name) {
+        if (name != null && !name.isBlank()) {
+            return ResponseEntity.ok(facultyService.findByNameIgnoreCase(name));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @GetMapping("/{id}/student")
+    public ResponseEntity<Collection<Student>> getStudentsOfFaculty(@RequestParam Long id) {
+        if (id != null && id > 0) {
+            return ResponseEntity.ok(facultyService.findFacultyById(id).getStudentsOfTheFaculty());
+        }
+        return ResponseEntity.ok(Collections.emptyList());
+    }
 }
 

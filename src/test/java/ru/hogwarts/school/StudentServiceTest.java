@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
@@ -19,6 +20,7 @@ import java.util.*;
 public class StudentServiceTest {
     @Mock
     private StudentRepository studentRepository;
+
     @InjectMocks
     private StudentService studentService;
 
@@ -79,11 +81,34 @@ public class StudentServiceTest {
         org.junit.jupiter.api.Assertions.assertEquals(new Student(1L, "Anton", 12), studentService.createStudent(new Student(1L, "Anton", 12)));
         Mockito.when(studentRepository.save(new Student(2L, "Semen", 15))).thenReturn(new Student(2L, "Semen", 15));
         org.junit.jupiter.api.Assertions.assertEquals(new Student(2L, "Semen", 15), studentService.createStudent(new Student(2L, "Semen", 15)));
-        List<Student> studentsByAge = studentService.getStudentsByAge(15);
-        Mockito.when(studentRepository.findAll()).thenReturn(studentsByAge);
+        Collection<Student> studentsByAge = studentService.getStudentsByAge(15);
+        Mockito.when(studentRepository.findByAge(15)).thenReturn(studentsByAge);
         org.junit.jupiter.api.Assertions.assertEquals(studentsByAge, studentService.getStudentsByAge(15));
 
     }
+
+    @Test
+    public void findByAgeBetween() {
+        Mockito.when(studentRepository.save(new Student(1L, "Anton", 12))).thenReturn(new Student(1L, "Anton", 12));
+        org.junit.jupiter.api.Assertions.assertEquals(new Student(1L, "Anton", 12), studentService.createStudent(new Student(1L, "Anton", 12)));
+        Mockito.when(studentRepository.save(new Student(2L, "Semen", 15))).thenReturn(new Student(2L, "Semen", 15));
+        org.junit.jupiter.api.Assertions.assertEquals(new Student(2L, "Semen", 15), studentService.createStudent(new Student(2L, "Semen", 15)));
+        Collection<Student> studentsByAgeBetween = studentService.findByAgeBetween(10, 13);
+        studentsByAgeBetween.add(new Student(1L, "Anton", 12));
+        Mockito.when(studentRepository.findByAgeBetween(10, 13)).thenReturn(studentsByAgeBetween);
+        org.junit.jupiter.api.Assertions.assertEquals(studentsByAgeBetween, studentService.findByAgeBetween(10, 13));
+
+    }
+
+    @Test
+    public void findFacultyByIdStudent() {
+        Student student = new Student(1L, "Anton", 12);
+        student.setFaculty(new Faculty(10L, "Griffindor", "red"));
+        Mockito.when(studentRepository.findStudentById(1L)).thenReturn(student);
+        org.junit.jupiter.api.Assertions.assertEquals(new Faculty(10L, "Griffindor", "red"), studentService.findFacultyByIdStudent(1L));
+
+    }
+
 
 }
 
