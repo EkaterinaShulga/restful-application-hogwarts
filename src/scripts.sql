@@ -3,8 +3,7 @@ from student
 where age BETWEEN 11 and 14;
 
 
-select name from student
-GROUP BY name;
+select name from student;
 
 
 select * from student

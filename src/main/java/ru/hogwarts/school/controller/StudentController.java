@@ -70,7 +70,7 @@ public class StudentController {
     }
 
     @GetMapping("/{id}student")
-    public ResponseEntity<Faculty> getFacultyByIdStudent(@RequestParam("id") Long id) {
+    public ResponseEntity<Faculty> getFacultyByIdStudent(@PathVariable("id") Long id) {
        return ResponseEntity.ok(studentService.findFacultyByIdStudent(id));
     }
 }

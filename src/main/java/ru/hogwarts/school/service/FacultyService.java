@@ -33,8 +33,8 @@ public class FacultyService {
         return facultyRepository.findAll();
     }
 
-    public Faculty findByNameOrColorIgnoreCase(String nameOrColor) {
-        return facultyRepository.findByNameOrColorIgnoreCase(nameOrColor, nameOrColor);
+    public Collection<Faculty> findByNameIgnoreCaseOrColorIgnoreCase(String nameOrColor) {
+        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(nameOrColor, nameOrColor);
 
     }
 

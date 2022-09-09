@@ -54,10 +54,10 @@ public class FacultyController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/name/color")
-    public ResponseEntity<Faculty> findNameOrColorFacultyIgnoreCase(@RequestParam String nameOrColor) {
+    @GetMapping(params = "nameOrColor")
+    public ResponseEntity<Collection<Faculty>> findByNameIgnoreCaseOrColorIgnoreCase(@RequestParam String nameOrColor) {
         if (nameOrColor != null && !nameOrColor.isBlank()) {
-            return ResponseEntity.ok(facultyService.findByNameOrColorIgnoreCase(nameOrColor));
+            return ResponseEntity.ok(facultyService.findByNameIgnoreCaseOrColorIgnoreCase(nameOrColor));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
@@ -68,7 +68,7 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}/students")
-    public ResponseEntity<Collection<Student>> getStudentsOfFaculty(@RequestParam Long id) {
+    public ResponseEntity<Collection<Student>> getStudentsOfFaculty(@PathVariable("id") Long id) {
         if (id != null && id > 0) {
             return ResponseEntity.ok(facultyService.findFacultyById(id).getStudentsOfTheFaculty());
         }
