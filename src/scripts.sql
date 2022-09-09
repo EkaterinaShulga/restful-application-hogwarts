@@ -1,14 +1,18 @@
-select * from student where age > 11 AND age <16;
+select *
+from student
+where age BETWEEN 11 and 14;
 
 
 select name from student
 GROUP BY name;
 
 
-select * FROM student where student.name LIKE  '%e%';
+select * from student
+where student.name LIKE '%e%';
 
 
-SELECT * from student where age < 15;
+SELECT * from student
+where age < student.id;
 
 
 select * from student

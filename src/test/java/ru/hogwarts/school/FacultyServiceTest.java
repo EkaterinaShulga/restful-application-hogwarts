@@ -73,26 +73,17 @@ public class FacultyServiceTest {
     }
 
     @Test
-    public void getNameFacultyIgnoreCasePositive() {
-        Mockito.when(facultyRepository.findByNameIgnoreCase("hogwarts")).thenReturn(new Faculty(1L, "Hogwarts", "red"));
-        org.junit.jupiter.api.Assertions.assertEquals(new Faculty(1L, "Hogwarts", "red"), facultyService.findByNameIgnoreCase("hogwarts"));
+    public void getNameOrColorFacultyIgnoreCasePositive() {
+        Mockito.when(facultyService.findByNameOrColorIgnoreCase("hogwarts")).thenReturn(new Faculty(1L, "Hogwarts", "red"));
+        org.junit.jupiter.api.Assertions.assertEquals(new Faculty(1L, "Hogwarts", "red"), facultyService.findByNameOrColorIgnoreCase("hogwarts"));
+
     }
 
     @Test
-    public void getNameFacultyIgnoreCaseNegative() {
-        org.assertj.core.api.Assertions.assertThatNoException().isThrownBy(() -> facultyService.findByNameIgnoreCase(" "));
+    public void getNameOrColorFacultyIgnoreCaseNegative() {
+        org.assertj.core.api.Assertions.assertThatNoException().isThrownBy(() -> facultyService.findByNameOrColorIgnoreCase(" "));
     }
 
-    @Test
-    public void findByColorIgnoreCase() {
-        Mockito.when(facultyRepository.save(new Faculty(1L, "Hogwarts", "red"))).thenReturn(new Faculty(1L, "Hogwarts", "red"));
-        org.junit.jupiter.api.Assertions.assertEquals(new Faculty(1L, "Hogwarts", "red"), facultyService.createFaculty(new Faculty(1L, "Hogwarts", "red")));
-        List<Faculty> allFaculties = List.of(
-                new Faculty(1L, "Hogwarts", "RED"));
-
-        Mockito.when(facultyRepository.findByColorIgnoreCase("red")).thenReturn(allFaculties);
-        org.junit.jupiter.api.Assertions.assertEquals(allFaculties, facultyService.findByColorIgnoreCase("red"));
-    }
 
     @Test
     public void findFacultyById() {

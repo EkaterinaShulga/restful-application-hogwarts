@@ -1,4 +1,6 @@
 package ru.hogwarts.school.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
 @Entity
@@ -11,6 +13,7 @@ public class Student {
 
     @ManyToOne()
     @JoinColumn(name = "faculty")
+    @JsonIgnore
     private Faculty faculty;
 
     public Faculty getFaculty() {
