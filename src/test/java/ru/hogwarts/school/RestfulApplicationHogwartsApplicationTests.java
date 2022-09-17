@@ -3,11 +3,15 @@ package ru.hogwarts.school;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class RestfulApplicationHogwartsApplicationTests {
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class RestfulApplicationHogwartsApplicationTests {
+
 
     @Test
     void contextLoads() {
     }
-
 }
+
+
+

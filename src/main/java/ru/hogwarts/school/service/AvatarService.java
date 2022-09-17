@@ -1,6 +1,8 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
@@ -18,7 +20,7 @@ import java.nio.file.Path;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
-@Transactional
+        //@Transactional
 public class AvatarService {
 
     @Value("${avatar.cover.dir.path}")
@@ -34,7 +36,9 @@ public class AvatarService {
 
     public void uploadAvatar(Long studentId, MultipartFile file) throws IOException {
         Student student = studentService.getStudent(studentId);
-
+        if (student == null) {
+           ResponseEntity.badRequest().body("Student is not on the list");;
+        }
         Path filePath = Path.of(avatarsDir, studentId + "." + getExtension(file.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
@@ -58,7 +62,7 @@ public class AvatarService {
     }
 
     public Avatar findStudentAvatar(Long studentId) {
-        return avatarRepository.findStudentById(studentId).orElse(new Avatar());
+        return avatarRepository.findAvatarByStudent_Id(studentId).orElse(new Avatar());
     }
 
     private String getExtension(String fileName) {
