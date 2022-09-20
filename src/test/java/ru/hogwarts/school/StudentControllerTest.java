@@ -11,6 +11,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import ru.hogwarts.school.controller.StudentController;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 
 import java.util.Collection;
@@ -106,7 +107,6 @@ public class StudentControllerTest {
                 .isNotEmpty();
 
     }
-
     @Test
     public void deleteStudentTest() throws Exception {
         final Long id = 52L;
@@ -115,6 +115,13 @@ public class StudentControllerTest {
         student.setAge(12);
         student.setId(id);
         testRestTemplate.delete("http://localhost:" + port + "/students/" + id, student);
+    }
+    @Test
+    public void getLastTwoStudentsTest()  {
+        Assertions
+                .assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/lastTwoStudents", String.class))
+                .isNotNull();
+
     }
 
 }

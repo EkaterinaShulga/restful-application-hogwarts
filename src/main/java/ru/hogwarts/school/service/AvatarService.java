@@ -1,7 +1,8 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,17 +11,17 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.AvatarRepository;
 
 import javax.imageio.ImageIO;
-import javax.transaction.Transactional;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
-        //@Transactional
+//@Transactional
 public class AvatarService {
 
     @Value("${avatar.cover.dir.path}")
@@ -37,7 +38,8 @@ public class AvatarService {
     public void uploadAvatar(Long studentId, MultipartFile file) throws IOException {
         Student student = studentService.getStudent(studentId);
         if (student == null) {
-           ResponseEntity.badRequest().body("Student is not on the list");;
+            ResponseEntity.badRequest().body("Student is not on the list");
+            ;
         }
         Path filePath = Path.of(avatarsDir, studentId + "." + getExtension(file.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
@@ -85,6 +87,11 @@ public class AvatarService {
             ImageIO.write(preview, getExtension(filePath.getFileName().toString()), baos);
             return baos.toByteArray();
         }
+    }
+
+    public Collection<Avatar> pageAvatar(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return (Collection<Avatar>) avatarRepository.findAll(pageable).getContent();
     }
 
 }

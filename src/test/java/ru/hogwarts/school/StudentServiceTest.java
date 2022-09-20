@@ -108,7 +108,33 @@ public class StudentServiceTest {
 
     }
 
+    @Test
+    public void getNumberOfStudentsTest() {
+        List<Student> allStudents = List.of(new Student(1L, "Anton", 12));
+        Mockito.when(studentRepository.numberOfStudents()).thenReturn(1);
+        org.junit.jupiter.api.Assertions.assertEquals(1, studentService.numberOfStudents());
+    }
 
+    @Test
+    public void getAverageAgeOfStudentsTest() {
+        List<Student> allStudents = List.of(
+                new Student(1L, "Anton", 12),
+                new Student(2L, "Semen", 10)
+        );
+        Mockito.when(studentRepository.averageAgeOfStudents()).thenReturn(11);
+        org.junit.jupiter.api.Assertions.assertEquals(11, studentService.averageAgeOfStudents());
+    }
+
+    @Test
+    public void getLastTwoStudentsTest() {
+        List<Student> allStudents = List.of(
+                new Student(1L, "Anton", 12),
+                new Student(2L, "Semen", 10),
+                new Student(3L, "Ivan", 13)
+        );
+        Mockito.when(studentRepository.lastTwoStudents()).thenReturn(List.of(new Student(3L, "Ivan", 13), new Student(2L, "Semen", 10)));
+        org.junit.jupiter.api.Assertions.assertEquals(List.of(new Student(3L, "Ivan", 13), new Student(2L, "Semen", 10)), studentService.lastTwoStudents());
+    }
 }
 
 
