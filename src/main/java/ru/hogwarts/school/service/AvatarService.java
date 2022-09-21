@@ -39,7 +39,7 @@ public class AvatarService {
         Student student = studentService.getStudent(studentId);
         if (student == null) {
             ResponseEntity.badRequest().body("Student is not on the list");
-            ;
+
         }
         Path filePath = Path.of(avatarsDir, studentId + "." + getExtension(file.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());

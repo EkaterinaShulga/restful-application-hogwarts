@@ -121,7 +121,7 @@ public class StudentServiceTest {
                 new Student(1L, "Anton", 12),
                 new Student(2L, "Semen", 10)
         );
-        Mockito.when(studentRepository.averageAgeOfStudents()).thenReturn(11);
+        Mockito.when(studentRepository.averageAgeOfStudents()).thenReturn(11.0);
         org.junit.jupiter.api.Assertions.assertEquals(11, studentService.averageAgeOfStudents());
     }
 

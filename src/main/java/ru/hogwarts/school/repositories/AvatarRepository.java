@@ -13,7 +13,7 @@ public interface AvatarRepository extends PagingAndSortingRepository<Avatar, Lon
 
     Optional<Avatar> findAvatarByStudent_Id(Long studentId);
 
-    Page<Avatar> findAll(Pageable pageable);
+
 
 
 }

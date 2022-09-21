@@ -82,7 +82,7 @@ public class StudentController {
     }
 
     @GetMapping("/averageAgeOfStudents")
-    public Integer getAverageAgeOfStudents() {
+    public Double getAverageAgeOfStudents() {
         return studentService.averageAgeOfStudents();
     }
 

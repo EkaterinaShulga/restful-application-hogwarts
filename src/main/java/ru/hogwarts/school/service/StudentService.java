@@ -53,7 +53,7 @@ public class StudentService {
         return studentRepository.numberOfStudents();
     }
 
-    public Integer averageAgeOfStudents() {
+    public Double averageAgeOfStudents() {
         return studentRepository.averageAgeOfStudents();
     }
 

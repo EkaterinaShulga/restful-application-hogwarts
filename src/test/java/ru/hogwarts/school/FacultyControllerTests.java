@@ -127,9 +127,8 @@ class FacultyControllerTests {
                 .andExpect(jsonPath("$[0].name").value(name))
                 .andExpect(jsonPath("$[0].color").value(color));
 
+/*
 
-
-       /*
         when(studentRepository.save(any(Student.class))).thenReturn(student);
         when(facultyRepository.findFacultyById(any(Long.class))).thenReturn(faculty);
         when(studentRepository.findAll()).thenReturn(students);
