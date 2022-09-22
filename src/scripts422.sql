@@ -14,5 +14,5 @@ CREATE TABLE people
     drivers_license boolean not null,
     carsId INTEGER references cars(id)
 );
-
+select * from cars;
 
