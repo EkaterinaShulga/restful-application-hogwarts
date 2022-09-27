@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 //@Transactional
 public class AvatarService {
 
+    Logger logger = LoggerFactory.getLogger(AvatarService.class);
     @Value("${avatar.cover.dir.path}")
     private String avatarsDir;
 
@@ -37,6 +40,7 @@ public class AvatarService {
 
     public void uploadAvatar(Long studentId, MultipartFile file) throws IOException {
         Student student = studentService.getStudent(studentId);
+        logger.debug("the student was transferred to the method: {}", student);
         if (student == null) {
             ResponseEntity.badRequest().body("Student is not on the list");
 

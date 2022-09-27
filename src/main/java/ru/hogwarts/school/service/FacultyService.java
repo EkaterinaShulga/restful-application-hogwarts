@@ -1,4 +1,6 @@
 package ru.hogwarts.school.service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repositories.FacultyRepository;
@@ -6,7 +8,7 @@ import java.util.*;
 
 @Service
 public class FacultyService {
-
+    Logger logger = LoggerFactory.getLogger( FacultyService.class);
     private final FacultyRepository facultyRepository;
 
     public FacultyService(FacultyRepository facultyRepository) {
@@ -18,6 +20,7 @@ public class FacultyService {
     }
 
     public Faculty getFaculty(long id) {
+        logger.warn("check the correctness of the faculty id");
         return facultyRepository.findById(id).orElse(null);
     }
 

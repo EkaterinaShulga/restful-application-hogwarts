@@ -1,5 +1,6 @@
 package ru.hogwarts.school.controller;
 
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
 import java.util.List;
+
 
 
 @RestController
@@ -89,6 +91,8 @@ public class StudentController {
     @GetMapping("/lastTwoStudents")
     public ResponseEntity<List<Student>> getLastTwoStudents() {
         return ResponseEntity.ok(studentService.lastTwoStudents());
+    }
+
 
     }
-}
+
