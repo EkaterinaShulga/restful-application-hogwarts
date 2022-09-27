@@ -1,5 +1,6 @@
 package ru.hogwarts.school.service;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -7,7 +8,9 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.StudentRepository;
 
+
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -78,4 +81,38 @@ public class StudentService {
     }
 
 
+    public List<String> namesOfAllStudents() {
+        List<Student> allStudents = studentRepository.findAll();
+        List<String> allNames = new ArrayList<>();
+        for (Student student : allStudents) {
+            allNames.add(student.getName());
+        }
+        return allNames.stream()
+                .sorted()
+                .filter(s -> s.startsWith("H"))
+                .map(s -> s.toUpperCase(Locale.ROOT))
+                .collect(Collectors.toList());
+    }
+
+    public OptionalDouble averageAgeStudents() {
+        List<Student> allStudents = studentRepository.findAll();
+        List<Integer> ageOfAllStudents = new ArrayList<>();
+        for (Student student : allStudents) {
+            ageOfAllStudents.add(student.getAge());
+        }
+        OptionalDouble average = ageOfAllStudents.stream().mapToInt(e -> e).average();
+
+        return average;
+
+    }
 }
+
+
+
+
+
+
+
+
+
+

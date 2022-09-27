@@ -10,7 +10,7 @@ import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
 import java.util.List;
-
+import java.util.OptionalDouble;
 
 
 @RestController
@@ -93,6 +93,15 @@ public class StudentController {
         return ResponseEntity.ok(studentService.lastTwoStudents());
     }
 
-
+    @GetMapping("/namesOfAllStudents")
+    public ResponseEntity<List<String>> namesOfAllStudents() {
+        return ResponseEntity.ok(studentService.namesOfAllStudents());
     }
+
+    @GetMapping("/averageAgeStudents")
+    public ResponseEntity<OptionalDouble> averageAgeStudents() {
+        return ResponseEntity.ok(studentService.averageAgeStudents());
+    }
+
+}
 

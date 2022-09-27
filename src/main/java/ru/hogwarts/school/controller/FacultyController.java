@@ -1,15 +1,13 @@
 package ru.hogwarts.school.controller;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
-import java.util.Collection;
-import java.util.Collections;
 
+import java.util.*;
 
 
 @RestController
@@ -75,6 +73,17 @@ public class FacultyController {
             return ResponseEntity.ok(facultyService.findFacultyById(id).getStudentsOfTheFaculty());
         }
         return ResponseEntity.ok(Collections.emptyList());
+    }
+
+
+    @GetMapping("/LongestNameOfFaculty")
+    public ResponseEntity<OptionalInt> LongestNameOfFaculty(){
+        return ResponseEntity.ok(facultyService.LongestNameOfFaculty());
+
+    }
+    @GetMapping("/getSum()")
+    public ResponseEntity<Integer>getSum(){
+        return ResponseEntity.ok(facultyService.getSum());
     }
 }
 
