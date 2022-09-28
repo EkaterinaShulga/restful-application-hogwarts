@@ -11,8 +11,8 @@ public class InfoService implements InfoServiceInterface{
     private Integer port;
 
     @Override
-    public ResponseEntity<Integer> getPort(){
-        return ResponseEntity.ok(port);
+    public Integer getPort(){
+        return port;
     }
 
 

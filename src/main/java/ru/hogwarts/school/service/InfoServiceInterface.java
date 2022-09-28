@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface InfoServiceInterface {
 
-    ResponseEntity<Integer> getPort();
+    Integer getPort();
 
 
 }

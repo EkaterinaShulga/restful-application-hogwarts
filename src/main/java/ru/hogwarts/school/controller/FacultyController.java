@@ -64,7 +64,7 @@ public class FacultyController {
 
     @GetMapping
     public ResponseEntity<Collection<Faculty>> findFaculties() {
-       return ResponseEntity.ok(facultyService.getAllFaculties());
+        return ResponseEntity.ok(facultyService.getAllFaculties());
     }
 
     @GetMapping("/{id}/students")
@@ -77,12 +77,13 @@ public class FacultyController {
 
 
     @GetMapping("/LongestNameOfFaculty")
-    public ResponseEntity<OptionalInt> LongestNameOfFaculty(){
-        return ResponseEntity.ok(facultyService.LongestNameOfFaculty());
+    public ResponseEntity<String> longestNameOfFaculty() {
+        return ResponseEntity.ok(facultyService.longestNameOfFaculty());
 
     }
-    @GetMapping("/getSum()")
-    public ResponseEntity<Integer>getSum(){
+
+    @GetMapping("/getSum")
+    public ResponseEntity<Integer> getSum() {
         return ResponseEntity.ok(facultyService.getSum());
     }
 }

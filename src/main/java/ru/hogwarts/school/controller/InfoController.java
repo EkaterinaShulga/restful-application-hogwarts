@@ -19,7 +19,7 @@ public class InfoController {
 
     @GetMapping
     public ResponseEntity<Integer> getPort() {
-        return infoServiceInterface.getPort();
+        return ResponseEntity.ok(infoServiceInterface.getPort());
     }
 
 

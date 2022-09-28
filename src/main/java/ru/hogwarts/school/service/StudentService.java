@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService {
 
-    Logger logger = LoggerFactory.getLogger(StudentService.class);
+    private final Logger logger = LoggerFactory.getLogger(StudentService.class);
     private final StudentRepository studentRepository;
 
     public StudentService(StudentRepository studentRepository) {
@@ -82,27 +82,21 @@ public class StudentService {
 
 
     public List<String> namesOfAllStudents() {
-        List<Student> allStudents = studentRepository.findAll();
-        List<String> allNames = new ArrayList<>();
-        for (Student student : allStudents) {
-            allNames.add(student.getName());
-        }
-        return allNames.stream()
-                .sorted()
+
+        return studentRepository.findAll().stream()
+                .map((s) -> s.getName())
                 .filter(s -> s.startsWith("H"))
+                .sorted()
                 .map(s -> s.toUpperCase(Locale.ROOT))
                 .collect(Collectors.toList());
     }
 
-    public OptionalDouble averageAgeStudents() {
-        List<Student> allStudents = studentRepository.findAll();
-        List<Integer> ageOfAllStudents = new ArrayList<>();
-        for (Student student : allStudents) {
-            ageOfAllStudents.add(student.getAge());
-        }
-        OptionalDouble average = ageOfAllStudents.stream().mapToInt(e -> e).average();
+    public Double averageAgeStudents() {
 
-        return average;
+        return studentRepository.findAll().stream()
+                .mapToDouble(s -> s.getAge())
+                .average().getAsDouble();
+
 
     }
 }

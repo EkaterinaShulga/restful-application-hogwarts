@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 @Service
 public class FacultyService {
-    Logger logger = LoggerFactory.getLogger(FacultyService.class);
+    private final Logger logger = LoggerFactory.getLogger(FacultyService.class);
     private final FacultyRepository facultyRepository;
 
     public FacultyService(FacultyRepository facultyRepository) {
@@ -49,14 +49,12 @@ public class FacultyService {
 
     }
 
-    public OptionalInt LongestNameOfFaculty() {
-        List<String> namesFaculties = new ArrayList<>();
-        List<Faculty> allFaculty = facultyRepository.findAll();
-        for (Faculty faculty : allFaculty) {
-            namesFaculties.add(faculty.getName());
-        }
-        OptionalInt longestNameOfFaculty = namesFaculties.stream().mapToInt(String::length).max();
-        return longestNameOfFaculty;
+    public String longestNameOfFaculty() {
+
+        return (String) facultyRepository.findAll()
+                .stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparingInt(String::length)).get();
 
     }
 
