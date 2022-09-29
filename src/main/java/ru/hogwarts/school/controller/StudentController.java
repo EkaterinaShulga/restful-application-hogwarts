@@ -103,13 +103,13 @@ public class StudentController {
     }
 
     @GetMapping("/threads")
-    public void streamsOfStudentNames() {
-        studentService.streamsOfStudentNames();
+    public void getNamesUsingStreams() {
+        studentService.returnNamesUsingStreams();
     }
 
-    @GetMapping("/oneThread")
-    public void OneStreamOfStudentNames() {
-        studentService.oneStreamOfStudentNames();
+    @GetMapping("/namesPairs")
+    public void getNamesPairs() {
+        studentService.getNamesPairs();
     }
 }
 

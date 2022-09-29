@@ -15,9 +15,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
-    int count = 0;
     private final Logger logger = LoggerFactory.getLogger(StudentService.class);
     private final StudentRepository studentRepository;
+
+    public Object flag = new Object();
 
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -98,49 +99,55 @@ public class StudentService {
                 .average().orElseThrow();
     }
 
-    public void streamsOfStudentNames() {
-        getStudentsForStreams(42);
-        getStudentsForStreams(43);
+    public void returnNamesUsingStreams() {
+        getStudentsForStreams(0);
+        getStudentsForStreams(1);
+
 
         new Thread(() -> {
-            getStudentsForStreams(45);
-            getStudentsForStreams(52);
+            getStudentsForStreams(2);
+            getStudentsForStreams(3);
         }).start();
 
         new Thread(() -> {
-            getStudentsForStreams(57);
-            getStudentsForStreams(58);
-        }).start();
-    }
-
-    public void getStudentsForStreams(long id) {
-        Student student = studentRepository.findStudentById(id);
-        System.out.println(student.getName() + count);
-        count++;
-
-    }
-
-    public void oneStreamOfStudentNames() {
-        getStudentsForStream(42);
-        getStudentsForStream(43);
-
-        new Thread(() -> {
-            getStudentsForStream(45);
-            getStudentsForStream(52);
-        }).start();
-
-        new Thread(() -> {
-            getStudentsForStream(57);
-            getStudentsForStream(58);
+            getStudentsForStreams(4);
+            getStudentsForStreams(5);
         }).start();
     }
 
-    public synchronized void getStudentsForStream(long id) {
-        Student student = studentRepository.findStudentById(id);
+    public void getStudentsForStreams(int count) {
+        List<Student> students = studentRepository.findAll();
+        Student student = students.get(count);
         System.out.println(student.getName());
-
     }
+
+    public void getNamesPairs() {
+        getNamesPairsForStreams(0, 1);
+
+        new Thread(() -> {
+            getNamesPairsForStreams(2, 3);
+        }).start();
+
+        new Thread(() -> {
+            getNamesPairsForStreams(4, 5);
+        }).start();
+    }
+
+    public synchronized void getNamesPairsForStreams(int count1, int count2) {
+        synchronized (flag) {
+            List<Student> students = studentRepository.findAll();
+            Student student1 = students.get(count1);
+            Student student2 = students.get(count2);
+            System.out.println(student1.getName());
+            System.out.println(student2.getName());
+
+        }
+    }
+
 }
+
+
+
 
 
 
