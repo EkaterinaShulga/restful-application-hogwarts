@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
-
+    int count = 0;
     private final Logger logger = LoggerFactory.getLogger(StudentService.class);
     private final StudentRepository studentRepository;
 
@@ -95,8 +95,49 @@ public class StudentService {
 
         return studentRepository.findAll().stream()
                 .mapToDouble(s -> s.getAge())
-                .average().getAsDouble();
+                .average().orElseThrow();
+    }
 
+    public void streamsOfStudentNames() {
+        getStudentsForStreams(42);
+        getStudentsForStreams(43);
+
+        new Thread(() -> {
+            getStudentsForStreams(45);
+            getStudentsForStreams(52);
+        }).start();
+
+        new Thread(() -> {
+            getStudentsForStreams(57);
+            getStudentsForStreams(58);
+        }).start();
+    }
+
+    public void getStudentsForStreams(long id) {
+        Student student = studentRepository.findStudentById(id);
+        System.out.println(student.getName() + count);
+        count++;
+
+    }
+
+    public void oneStreamOfStudentNames() {
+        getStudentsForStream(42);
+        getStudentsForStream(43);
+
+        new Thread(() -> {
+            getStudentsForStream(45);
+            getStudentsForStream(52);
+        }).start();
+
+        new Thread(() -> {
+            getStudentsForStream(57);
+            getStudentsForStream(58);
+        }).start();
+    }
+
+    public synchronized void getStudentsForStream(long id) {
+        Student student = studentRepository.findStudentById(id);
+        System.out.println(student.getName());
 
     }
 }

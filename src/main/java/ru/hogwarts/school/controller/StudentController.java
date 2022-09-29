@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.List;
 
 
-
 @RestController
 @RequestMapping("/students")
 public class StudentController {
@@ -103,5 +102,14 @@ public class StudentController {
         return ResponseEntity.ok(studentService.averageAgeStudents());
     }
 
+    @GetMapping("/threads")
+    public void streamsOfStudentNames() {
+        studentService.streamsOfStudentNames();
+    }
+
+    @GetMapping("/oneThread")
+    public void OneStreamOfStudentNames() {
+        studentService.oneStreamOfStudentNames();
+    }
 }
 

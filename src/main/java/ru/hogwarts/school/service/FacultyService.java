@@ -54,7 +54,7 @@ public class FacultyService {
         return (String) facultyRepository.findAll()
                 .stream()
                 .map(Faculty::getName)
-                .max(Comparator.comparingInt(String::length)).get();
+                .max(Comparator.comparingInt(String::length)).orElse("список пуст");
 
     }
 
